@@ -34,7 +34,7 @@ ps_x87:
 	xor ecx, ecx
 .for:
 	cmp ecx, eax
-	jpe .endfor
+	jge .endfor
 
 	;sum += x[i] * y[i];
 	fld dword [esi+ecx*4]
@@ -69,7 +69,7 @@ ps_sse:
 	xor ecx, ecx
 .for:
 	cmp ecx, eax
-	jpe .endfor
+	jge .endfor
 
 	;sum[0:3] +=...
 	movaps xmm1, [esi+ecx*4]
@@ -109,7 +109,7 @@ ps_sse_u2:
 	xor ecx, ecx
 .for:
 	cmp ecx, eax
-	jpe .endfor
+	jge .endfor
 
 	;sum[0:3] +=...
 	;sum2[4:7] +=
@@ -159,7 +159,7 @@ ps_sse_u2:
 ;
 ;.for:
 ;	cmp ecx, eax
-;	jpe .endfor
+;	jge .endfor
 ;
 ;	;sum[0:3] +=...
 ;	vmovaps ymm1, [esi+ecx*4]
