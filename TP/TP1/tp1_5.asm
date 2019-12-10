@@ -28,14 +28,14 @@ calc_sum:
 	cmp ecx, edx
 	jge .endfor
 
-		add, [ebx+ecx*4] ; sum += *(t+i)
+	add eax, [ebx+ecx*4] ; sum += *(t+i)
 
 	inc ecx
 	jmp .for
 
 .endfor:
-	mov esp,ebp			; sortie du sous-program
 	pop ebx
+	mov esp,ebp			; sortie du sous-program
 	pop ebp				
 	ret
 
@@ -46,15 +46,25 @@ main:
 
 	pushad				; save les 8 reg genereaux
 
+	xor ecx, ecx
 .for_i:
-	cmp ecx, ebx
-	jge .endfor
+	cmp ecx, MAXI
+	jge .endfor_i
 
-	add eax, ecx
+	;add eax, ecx
+	lea ebx, [ecx*2]
+	mov [tab+ecx*4], ebx
+
+
 	inc ecx 			; add ecx, 1
 	jmp .for_i
 
 .endfor_i:
+
+	push MAXI
+	push tab
+	call calc_sum
+	add esp, 8
 
 	push eax
 	push dword msg
