@@ -26,25 +26,25 @@ ps_x87:
 	push esi
 	push edi
 
-	mov esi, [ebp+8]
-	mov edi, [ebp+12]
-	mov eax, [ebp+16]
+	mov esi, [ebp+8]					;esi <- get the pointer to the first element of the array x
+	mov edi, [ebp+12]					;edi <- and of y
+	mov eax, [ebp+16]					;eax <- gets the size of the arrays 
 
 	fldz; sum = st0 = 0;
-	xor ecx, ecx
+	xor ecx, ecx						;i <- 0
 .for:
 	cmp ecx, eax
-	jge .endfor
+	jge .endfor							;while(ecx < eax)
 
-	;sum += x[i] * y[i];
-	fld dword [esi+ecx*4]
-	fmul dword [edi+ecx*4]
-	faddp st1, st0
+										;sum += x[i] * y[i];
+	fld dword [esi+ecx*4]				;st0 <- x[i] //push onto "floating point stack"
+	fmul dword [edi+ecx*4]				;st0 *= y[i] //multiplies the top of stack by the arg 
+	faddp st1, st0						;st1 <- st0  //BUT ALSO pops off st0, moving st1 to the top of the stack. This is good, because the top of the floating point stack is where the return value should be
 
-	inc ecx
-	jmp .for
+	inc ecx								;i++
+	jmp .for							;when we start this loop again, we'll put push x[i] on to the stack, putting our sumtotal back in st1 so that line (this-3) works
 .endfor:
-	pop edi
+	pop edi								;normal get the hell outta here shit
 	pop esi
 	mov esp,ebp
 	pop ebp
